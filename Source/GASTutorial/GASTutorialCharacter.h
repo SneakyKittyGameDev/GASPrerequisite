@@ -3,11 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
 #include "GameplayTagContainer.h"
 #include "Logging/LogMacros.h"
 #include "GASTutorialCharacter.generated.h"
 
+class UInputAbilitySystemComponent;
 class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
@@ -18,7 +20,7 @@ class UInputAbilitySystemDataAsset;
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
-class AGASTutorialCharacter : public ACharacter
+class AGASTutorialCharacter : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -46,10 +48,15 @@ class AGASTutorialCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Abilities, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAbilitySystemComponent> AbilitySystemComponent;
 
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void OnRep_PlayerState() override;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAbilitySystemDataAsset> AbilityInputsDataAsset;
-
+	
 	void OnAbilityInputPressed(FGameplayTag Tag);
 	void OnAbilityInputReleased(FGameplayTag Tag);
 	
@@ -78,5 +85,6 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 };
 

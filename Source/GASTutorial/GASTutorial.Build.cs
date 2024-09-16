@@ -16,6 +16,7 @@ public class GASTutorial : ModuleRules
 			"InputCore",
 			"EnhancedInput",
 			"GameplayTags",
+			"GameplayAbilities",
 			"AbilitySystemCore"
 		});
 	}

@@ -12,6 +12,7 @@
 #include "InputActionValue.h"
 
 #include "Components/AbilitySystemEnhancedInputComponent.h"
+#include "Components/InputAbilitySystemComponent.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -52,14 +53,18 @@ AGASTutorialCharacter::AGASTutorialCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
-	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
-	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+	AbilitySystemComponent = CreateDefaultSubobject<UInputAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 }
 
 void AGASTutorialCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+}
+
+UAbilitySystemComponent* AGASTutorialCharacter::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -87,6 +92,18 @@ void AGASTutorialCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 
 	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AGASTutorialCharacter::Move);
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AGASTutorialCharacter::Look);
+}
+
+void AGASTutorialCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+}
+
+void AGASTutorialCharacter::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 }
 
 void AGASTutorialCharacter::OnAbilityInputPressed(FGameplayTag Tag)
