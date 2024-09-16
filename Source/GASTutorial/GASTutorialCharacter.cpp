@@ -108,12 +108,12 @@ void AGASTutorialCharacter::OnRep_PlayerState()
 
 void AGASTutorialCharacter::OnAbilityInputPressed(FGameplayTag Tag)
 {
-	UE_LOG(LogTemp, Warning, TEXT("OnAbilityInputPressed: %s"), *Tag.GetTagName().ToString());
+	AbilitySystemComponent->AbilityInputPressed(Tag);
 }
 
 void AGASTutorialCharacter::OnAbilityInputReleased(FGameplayTag Tag)
 {
-	UE_LOG(LogTemp, Warning, TEXT("OnAbilityInputReleased: %s"), *Tag.GetTagName().ToString());
+	AbilitySystemComponent->AbilityInputReleased(Tag);
 }
 
 void AGASTutorialCharacter::Move(const FInputActionValue& Value)

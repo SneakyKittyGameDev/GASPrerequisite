@@ -56,8 +56,10 @@ class AGASTutorialCharacter : public ACharacter, public IAbilitySystemInterface
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAbilitySystemDataAsset> AbilityInputsDataAsset;
-	
+
+	UFUNCTION(BlueprintCallable)
 	void OnAbilityInputPressed(FGameplayTag Tag);
+	UFUNCTION(BlueprintCallable)
 	void OnAbilityInputReleased(FGameplayTag Tag);
 	
 public:
