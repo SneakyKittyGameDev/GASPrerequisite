@@ -11,6 +11,8 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 
+#include "Components/AbilitySystemEnhancedInputComponent.h"
+
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
 //////////////////////////////////////////////////////////////////////////
@@ -74,23 +76,27 @@ void AGASTutorialCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 		}
 	}
 	
-	// Set up action bindings
-	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
-		
-		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+	UAbilitySystemEnhancedInputComponent* EnhancedInputComponent = Cast<UAbilitySystemEnhancedInputComponent>(PlayerInputComponent);
+	checkf(EnhancedInputComponent, TEXT("Ability System Enhanced Input Component is likely not set in project settings"));
+	checkf(AbilityInputsDataAsset, TEXT("InputDataAsset INVALID"));
+	
+	EnhancedInputComponent->BindAbilityInputs(AbilityInputsDataAsset, this, &AGASTutorialCharacter::OnAbilityInputPressed, &AGASTutorialCharacter::OnAbilityInputReleased);
+	
+	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
+	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
-		// Moving
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AGASTutorialCharacter::Move);
+	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AGASTutorialCharacter::Move);
+	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AGASTutorialCharacter::Look);
+}
 
-		// Looking
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AGASTutorialCharacter::Look);
-	}
-	else
-	{
-		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
-	}
+void AGASTutorialCharacter::OnAbilityInputPressed(FGameplayTag Tag)
+{
+	UE_LOG(LogTemp, Warning, TEXT("OnAbilityInputPressed: %s"), *Tag.GetTagName().ToString());
+}
+
+void AGASTutorialCharacter::OnAbilityInputReleased(FGameplayTag Tag)
+{
+	UE_LOG(LogTemp, Warning, TEXT("OnAbilityInputReleased: %s"), *Tag.GetTagName().ToString());
 }
 
 void AGASTutorialCharacter::Move(const FInputActionValue& Value)
