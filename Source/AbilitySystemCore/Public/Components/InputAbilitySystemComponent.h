@@ -25,13 +25,13 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	void AddAbility(const TSubclassOf<UGameplayAbility> Ability);
-	void AddAbilities(TArray<TSubclassOf<UGameplayAbility>> Abilities);
+	void AddAbility(const TSubclassOf<UGameplayAbility>& Ability);
+	void AddAbilities(const TArray<TSubclassOf<UGameplayAbility>>& Abilities);
 
-	void AddEffect(const TSubclassOf<UGameplayEffect> Effect);
-	void AddEffects(TArray<TSubclassOf<UGameplayEffect>> Effects);
+	void AddEffect(const TSubclassOf<UGameplayEffect>& Effect);
+	void AddEffects(const TArray<TSubclassOf<UGameplayEffect>>& Effects);
 	
 	virtual void OnGiveAbility(FGameplayAbilitySpec& AbilitySpec) override;
-	void AbilityInputPressed(FGameplayTag Tag);
-	void AbilityInputReleased(FGameplayTag Tag);
+	void AbilityInputPressed(const FGameplayTag& Tag);
+	void AbilityInputReleased(const FGameplayTag& Tag);
 };

@@ -22,12 +22,12 @@ void UInputAbilitySystemComponent::BeginPlay()
 	}
 }
 
-void UInputAbilitySystemComponent::AddAbility(const TSubclassOf<UGameplayAbility> Ability)
+void UInputAbilitySystemComponent::AddAbility(const TSubclassOf<UGameplayAbility>& Ability)
 {
 	GiveAbility(FGameplayAbilitySpec(Ability));
 }
 
-void UInputAbilitySystemComponent::AddAbilities(TArray<TSubclassOf<UGameplayAbility>> Abilities)
+void UInputAbilitySystemComponent::AddAbilities(const TArray<TSubclassOf<UGameplayAbility>>& Abilities)
 {
 	for (const TSubclassOf<UGameplayAbility> Ability : Abilities)
 	{
@@ -35,7 +35,7 @@ void UInputAbilitySystemComponent::AddAbilities(TArray<TSubclassOf<UGameplayAbil
 	}
 }
 
-void UInputAbilitySystemComponent::AddEffect(const TSubclassOf<UGameplayEffect> Effect)
+void UInputAbilitySystemComponent::AddEffect(const TSubclassOf<UGameplayEffect>& Effect)
 {
 	FGameplayEffectContextHandle ContextHandle;
 	const FGameplayEffectSpecHandle SpecHandle = MakeOutgoingSpec(Effect, 1.0f, ContextHandle);
@@ -43,7 +43,7 @@ void UInputAbilitySystemComponent::AddEffect(const TSubclassOf<UGameplayEffect> 
 	ApplyGameplayEffectSpecToSelf(*SpecHandle.Data);
 }
 
-void UInputAbilitySystemComponent::AddEffects(TArray<TSubclassOf<UGameplayEffect>> Effects)
+void UInputAbilitySystemComponent::AddEffects(const TArray<TSubclassOf<UGameplayEffect>>& Effects)
 {
 	for (const TSubclassOf<UGameplayEffect> Effect : Effects)
 	{
@@ -60,7 +60,7 @@ void UInputAbilitySystemComponent::OnGiveAbility(FGameplayAbilitySpec& AbilitySp
 	}
 }
 
-void UInputAbilitySystemComponent::AbilityInputPressed(FGameplayTag Tag)
+void UInputAbilitySystemComponent::AbilityInputPressed(const FGameplayTag& Tag)
 {
 	for (FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
 	{
@@ -72,7 +72,7 @@ void UInputAbilitySystemComponent::AbilityInputPressed(FGameplayTag Tag)
 	}
 }
 
-void UInputAbilitySystemComponent::AbilityInputReleased(FGameplayTag Tag)
+void UInputAbilitySystemComponent::AbilityInputReleased(const FGameplayTag& Tag)
 {
 	for (FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
 	{
