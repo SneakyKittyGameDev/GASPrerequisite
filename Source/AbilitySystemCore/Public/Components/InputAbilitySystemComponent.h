@@ -20,13 +20,16 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Abilities")
 	TArray<TSubclassOf<UGameplayAbility>> StartingAbilities;
 	UPROPERTY(EditDefaultsOnly, Category = "Abilities")
+	TArray<TSubclassOf<UGameplayAbility>> StartingPassiveAbilities;
+	UPROPERTY(EditDefaultsOnly, Category = "Abilities")
 	TArray<TSubclassOf<UGameplayEffect>> StartingEffects;
 	
 	virtual void BeginPlay() override;
+	virtual void OnPlayerControllerSet() override;
 
 public:
-	void AddAbility(const TSubclassOf<UGameplayAbility>& Ability);
-	void AddAbilities(const TArray<TSubclassOf<UGameplayAbility>>& Abilities);
+	void AddAbility(const TSubclassOf<UGameplayAbility>& Ability, bool bAutoActivateAbility = false);
+	void AddAbilities(const TArray<TSubclassOf<UGameplayAbility>>& Abilities, bool bAutoActivateAbility = false);
 
 	void AddEffect(const TSubclassOf<UGameplayEffect>& Effect);
 	void AddEffects(const TArray<TSubclassOf<UGameplayEffect>>& Effects);

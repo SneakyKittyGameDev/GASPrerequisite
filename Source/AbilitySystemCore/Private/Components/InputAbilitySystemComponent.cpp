@@ -14,24 +14,39 @@ UInputAbilitySystemComponent::UInputAbilitySystemComponent()
 void UInputAbilitySystemComponent::BeginPlay()
 {
 	Super::BeginPlay();
+	
+}
 
+void UInputAbilitySystemComponent::OnPlayerControllerSet()
+{
+	Super::OnPlayerControllerSet();
+	
 	if (IsOwnerActorAuthoritative())
 	{
 		AddAbilities(StartingAbilities);
+		AddAbilities(StartingPassiveAbilities, true);
 		AddEffects(StartingEffects);
 	}
 }
 
-void UInputAbilitySystemComponent::AddAbility(const TSubclassOf<UGameplayAbility>& Ability)
+void UInputAbilitySystemComponent::AddAbility(const TSubclassOf<UGameplayAbility>& Ability, bool bAutoActivateAbility)
 {
-	GiveAbility(FGameplayAbilitySpec(Ability));
+	FGameplayAbilitySpec Spec = FGameplayAbilitySpec(Ability);
+	if (bAutoActivateAbility)
+	{
+		GiveAbilityAndActivateOnce(Spec);
+	}
+	else
+	{
+		GiveAbility(Spec);
+	}
 }
 
-void UInputAbilitySystemComponent::AddAbilities(const TArray<TSubclassOf<UGameplayAbility>>& Abilities)
+void UInputAbilitySystemComponent::AddAbilities(const TArray<TSubclassOf<UGameplayAbility>>& Abilities, bool bAutoActivateAbility)
 {
 	for (const TSubclassOf<UGameplayAbility> Ability : Abilities)
 	{
-		AddAbility(Ability);
+		AddAbility(Ability, bAutoActivateAbility);
 	}
 }
 
