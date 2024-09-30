@@ -86,7 +86,7 @@ void UInputAbilitySystemComponent::AbilityInputPressed(const FGameplayTag& Tag)
 				TryActivateAbility(AbilitySpec.Handle);
 			}
 			AbilitySpecInputPressed(AbilitySpec);
-			if (AbilitySpec.Ability->bReplicateInputDirectly)
+			if (AbilitySpec.Ability->bReplicateInputDirectly && !IsOwnerActorAuthoritative())
 			{
 				ServerSetInputPressed(AbilitySpec.Handle);
 			}
@@ -101,7 +101,7 @@ void UInputAbilitySystemComponent::AbilityInputReleased(const FGameplayTag& Tag)
 		if (AbilitySpec.IsActive() && AbilitySpec.DynamicAbilityTags.HasTagExact(Tag))
 		{
 			AbilitySpecInputReleased(AbilitySpec);
-			if (AbilitySpec.Ability->bReplicateInputDirectly)
+			if (AbilitySpec.Ability->bReplicateInputDirectly && !IsOwnerActorAuthoritative())
 			{
 				ServerSetInputReleased(AbilitySpec.Handle);
 			}
