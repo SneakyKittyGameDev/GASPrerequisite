@@ -77,7 +77,8 @@ void UInputAbilitySystemComponent::OnGiveAbility(FGameplayAbilitySpec& AbilitySp
 
 void UInputAbilitySystemComponent::AbilityInputPressed(const FGameplayTag& Tag)
 {
-	for (FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
+	TArray<FGameplayAbilitySpec> ActivatableAbilitiesCopy = GetActivatableAbilities();
+	for (FGameplayAbilitySpec& AbilitySpec : ActivatableAbilitiesCopy)
 	{
 		if (AbilitySpec.DynamicAbilityTags.HasTagExact(Tag))
 		{
@@ -96,7 +97,8 @@ void UInputAbilitySystemComponent::AbilityInputPressed(const FGameplayTag& Tag)
 
 void UInputAbilitySystemComponent::AbilityInputReleased(const FGameplayTag& Tag)
 {
-	for (FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
+	TArray<FGameplayAbilitySpec> ActivatableAbilitiesCopy = GetActivatableAbilities();
+	for (FGameplayAbilitySpec& AbilitySpec : ActivatableAbilitiesCopy)
 	{
 		if (AbilitySpec.IsActive() && AbilitySpec.DynamicAbilityTags.HasTagExact(Tag))
 		{
