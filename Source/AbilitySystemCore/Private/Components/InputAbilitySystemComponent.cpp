@@ -20,11 +20,30 @@ void UInputAbilitySystemComponent::BeginPlay()
 void UInputAbilitySystemComponent::OnPlayerControllerSet()
 {
 	Super::OnPlayerControllerSet();
-	
+
+	if (bAutoGiveStartingAbilities)
+	{
+		GiveStartingAbilities();
+	}
+	if (bAutoGiveStartingEffects)
+	{
+		GiveStartingEffects();
+	}
+}
+
+void UInputAbilitySystemComponent::GiveStartingAbilities()
+{
 	if (IsOwnerActorAuthoritative())
 	{
 		AddAbilities(StartingAbilities);
 		AddAbilities(StartingPassiveAbilities, true);
+	}
+}
+
+void UInputAbilitySystemComponent::GiveStartingEffects()
+{
+	if (IsOwnerActorAuthoritative())
+	{
 		AddEffects(StartingEffects);
 	}
 }
@@ -77,8 +96,8 @@ void UInputAbilitySystemComponent::OnGiveAbility(FGameplayAbilitySpec& AbilitySp
 
 void UInputAbilitySystemComponent::AbilityInputPressed(const FGameplayTag& Tag)
 {
-	TArray<FGameplayAbilitySpec> ActivatableAbilitiesCopy = GetActivatableAbilities();
-	for (FGameplayAbilitySpec& AbilitySpec : ActivatableAbilitiesCopy)
+	ABILITYLIST_SCOPE_LOCK();
+	for (FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
 	{
 		if (AbilitySpec.DynamicAbilityTags.HasTagExact(Tag))
 		{
@@ -97,8 +116,8 @@ void UInputAbilitySystemComponent::AbilityInputPressed(const FGameplayTag& Tag)
 
 void UInputAbilitySystemComponent::AbilityInputReleased(const FGameplayTag& Tag)
 {
-	TArray<FGameplayAbilitySpec> ActivatableAbilitiesCopy = GetActivatableAbilities();
-	for (FGameplayAbilitySpec& AbilitySpec : ActivatableAbilitiesCopy)
+	ABILITYLIST_SCOPE_LOCK();
+	for (FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
 	{
 		if (AbilitySpec.IsActive() && AbilitySpec.DynamicAbilityTags.HasTagExact(Tag))
 		{

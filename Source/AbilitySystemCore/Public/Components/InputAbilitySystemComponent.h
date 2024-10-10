@@ -17,6 +17,12 @@ public:
 	UInputAbilitySystemComponent();
 
 protected:
+	// This will auto give starting abilities when the player controller is set
+	UPROPERTY(EditDefaultsOnly, Category = "Abilities")
+	bool bAutoGiveStartingAbilities {true};
+	// This will auto give starting effects when the player controller is set
+	UPROPERTY(EditDefaultsOnly, Category = "Abilities")
+	bool bAutoGiveStartingEffects {true};
 	UPROPERTY(EditDefaultsOnly, Category = "Abilities")
 	TArray<TSubclassOf<UGameplayAbility>> StartingAbilities;
 	UPROPERTY(EditDefaultsOnly, Category = "Abilities")
@@ -28,6 +34,9 @@ protected:
 	virtual void OnPlayerControllerSet() override;
 
 public:
+	void GiveStartingAbilities();
+	void GiveStartingEffects();
+	
 	void AddAbility(const TSubclassOf<UGameplayAbility>& Ability, bool bAutoActivateAbility = false);
 	void AddAbilities(const TArray<TSubclassOf<UGameplayAbility>>& Abilities, bool bAutoActivateAbility = false);
 
