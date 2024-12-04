@@ -54,7 +54,7 @@ class AGASTutorialCharacter : public ACharacter, public IAbilitySystemInterface
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAbilitySystemDataAsset> AbilityInputsDataAsset;
 
 	UFUNCTION(BlueprintCallable)
@@ -64,22 +64,12 @@ class AGASTutorialCharacter : public ACharacter, public IAbilitySystemInterface
 	
 public:
 	AGASTutorialCharacter();
-	
 
 protected:
-
-	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
-
-	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
-			
 
-protected:
-	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	
-	// To add mapping context
 	virtual void BeginPlay();
 
 public:

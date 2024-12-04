@@ -21,6 +21,21 @@ void UInputAbilitySystemComponent::OnPlayerControllerSet()
 {
 	Super::OnPlayerControllerSet();
 
+	if (AbilityActorInfo->IsLocallyControlledPlayer())
+	{
+		if (IsOwnerActorAuthoritative())
+		{
+			Server_ClientReady_Implementation();
+		}
+		else
+		{
+			Server_ClientReady();
+		}
+	}
+}
+
+void UInputAbilitySystemComponent::Server_ClientReady_Implementation()
+{
 	if (bAutoGiveStartingAbilities)
 	{
 		GiveStartingAbilities();
@@ -104,6 +119,11 @@ void UInputAbilitySystemComponent::AbilityInputPressed(const FGameplayTag& Tag)
 			if (!AbilitySpec.IsActive())
 			{
 				TryActivateAbility(AbilitySpec.Handle);
+			}
+			else if (const UInputGameplayAbility* InputGameplayAbility = Cast<UInputGameplayAbility>(AbilitySpec.Ability); InputGameplayAbility && InputGameplayAbility->bEndAbilityIfInputPressedWhileActive)
+			{
+				CancelAbilitySpec(AbilitySpec, nullptr);
+				break;
 			}
 			AbilitySpecInputPressed(AbilitySpec);
 			if (AbilitySpec.Ability->bReplicateInputDirectly && !IsOwnerActorAuthoritative())

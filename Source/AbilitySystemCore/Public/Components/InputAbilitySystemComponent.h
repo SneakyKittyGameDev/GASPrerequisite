@@ -32,6 +32,8 @@ protected:
 	
 	virtual void BeginPlay() override;
 	virtual void OnPlayerControllerSet() override;
+	UFUNCTION(Server, Reliable)
+	void Server_ClientReady();
 
 public:
 	void GiveStartingAbilities();

@@ -13,6 +13,7 @@
 
 #include "Components/AbilitySystemEnhancedInputComponent.h"
 #include "Components/InputAbilitySystemComponent.h"
+#include "GameFramework/PlayerState.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -52,8 +53,6 @@ AGASTutorialCharacter::AGASTutorialCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-
-	AbilitySystemComponent = CreateDefaultSubobject<UInputAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 }
 
 void AGASTutorialCharacter::BeginPlay()
@@ -97,12 +96,14 @@ void AGASTutorialCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 void AGASTutorialCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
+	AbilitySystemComponent = Cast<UInputAbilitySystemComponent>(Cast<IAbilitySystemInterface>(GetPlayerState())->GetAbilitySystemComponent());
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 }
 
 void AGASTutorialCharacter::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
+	AbilitySystemComponent = Cast<UInputAbilitySystemComponent>(Cast<IAbilitySystemInterface>(GetPlayerState())->GetAbilitySystemComponent());
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 }
 

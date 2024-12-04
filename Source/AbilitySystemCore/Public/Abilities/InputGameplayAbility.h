@@ -19,6 +19,9 @@ public:
 	// Setting for initial activation. If true this will useful for something such as a passive ability
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Execution")
 	bool bAutoActivate {false};
+	// If true, when you try to activate this ability again while already active it will end
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Execution")
+	bool bEndAbilityIfInputPressedWhileActive {false};
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	FGameplayTag InputTag;
